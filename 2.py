@@ -1,28 +1,39 @@
 """
-Дополнить следующую функцию недостающим кодом:
+Инкапсулировать оба параметра (название и цену) товара родительского класса.
+Убедиться, что при сохранении текущей логики работы
+программы будет сгенерирована ошибка выполнения.
+Усовершенствовать родительский класс таким образом,
+чтобы получить доступ к защищенным переменным.
+Результат выполнения заданий 1 и 2 должен быть идентичным.
 """
-from os import listdir
-from os.path import isdir
 
 
-def print_directory_contents(sPath: str) -> None:
-    """
-    Функция принимает имя каталога и распечатывает его содержимое
-    в виде «путь и имя файла», а также любые другие
-    файлы во вложенных каталогах.
+class ItemDiscount:
 
-    Эта функция подобна os.walk. Использовать функцию os.walk
-    нельзя. Данная задача показывает ваше умение работать с
-    вложенными структурами.
-    """
-    files = listdir(sPath)
-    for file in files:
-        new_path = f"{sPath}/{file}"
-        if isdir(new_path):
-            print_directory_contents(new_path)
-        else:
-            print(new_path)
+    def __init__(self, name: str, price: float):
+        self.__name = name
+        self.__price = price
+
+    @property
+    def get_name(self):
+        return self.__name
+
+    @property
+    def get_price(self):
+        return self.__price
 
 
-if __name__ == "__main__":
-    print_directory_contents("..")
+class ItemDiscountReport:
+
+    def __init__(self, product: ItemDiscount):
+        self.product = product
+
+    @property
+    def get_parent_data(self):
+        return f"Product {self.product.__name} has price {self.product.__price}"
+
+
+parent_item = ItemDiscount("PC", 35999.99)
+
+# сохранение какой логики ?
+# обратиться к атрибутам пока даже не просят

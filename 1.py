@@ -1,28 +1,36 @@
 """
-Написать функцию, реализующую вывод таблицы умножения размерностью AｘB.
-Первый и второй множитель должны задаваться в виде аргументов функции.
-Значения каждой строки таблицы должны быть представлены списком,
-который формируется в цикле.
-После этого осуществляется вызов внешней lambda-функции,
-которая формирует на основе списка строку.
-Полученная строка выводится в главной функции.
-Элементы строки (элементы таблицы умножения) должны разделяться табуляцией.
+Проверить механизм наследования в Python. Для этого создать два класса.
+Первый — родительский (ItemDiscount),
+должен содержать статическую информацию о товаре: название и цену.
+Второй — дочерний (ItemDiscountReport),
+должен содержать функцию (get_parent_data),
+отвечающую за отображение информации о товаре в одной строке.
+Проверить работу программы, создав экземпляр (объект) родительского класса.
 """
 
 
-def multiplication_table(a: int, b: int) -> None:
-    """
-    Вывод таблицы умножения
-    :param a: от a
-    :param b: до b
-    :return: None
-    """
-    get_string = lambda l: "\t".join(map(str, l))
-    result_string = ""
-    for i in range(a, b + 1):
-        result_string += get_string([i * j for j in range(a, b + 1)]) + "\n"
-    print(result_string)
+class ItemDiscount:
+
+    def __init__(self, name: str, price: float):
+        self.name = name
+        self.price = price
 
 
-if __name__ == "__main__":
-    multiplication_table(1, 9)
+class ItemDiscountReport:
+
+    def __init__(self, product: ItemDiscount):
+        self.product = product
+
+    @property
+    def get_parent_data(self):
+        return f"Product {self.product.__name} has price {self.product.__price}"
+
+
+parent_item = ItemDiscount("PC", 35999.99)
+
+
+# не понял и не стал делать ItemDiscountReport дочерним
+# его задача только возвращать цену и имя товара одной строкой
+# зачем ему остальные атрибуты родителя нужны
+# ему нужен только метод get_parent_data
+# проще и логичнее при инициализации передвать обьект класса из которого будем брать данные

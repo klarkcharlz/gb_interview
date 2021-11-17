@@ -1,39 +1,23 @@
 """
-Инкапсулировать оба параметра (название и цену) товара родительского класса.
-Убедиться, что при сохранении текущей логики работы
-программы будет сгенерирована ошибка выполнения.
-Усовершенствовать родительский класс таким образом,
-чтобы получить доступ к защищенным переменным.
-Результат выполнения заданий 1 и 2 должен быть идентичным.
+Написать программу, которая запрашивает у пользователя ввод числа.
+На введенное число она отвечает сообщением, целое оно или дробное.
+Если дробное — необходимо далее выполнить сравнение чисел до
+и после запятой. Если они совпадают,
+программа должна возвращать значение True, иначе False.
 """
+from re import findall
 
+pattern = r'\d+'
 
-class ItemDiscount:
+while True:
+    number = input("Пожалуйста введите число. Целое или дробное:\n")
+    try:  # проверка что это число путем преобразований, isdigit на float в string не работает
+        float(number)  # если можно во флоат то можно и в инт, полюбому число
+    except ValueError:
+        pass
+    else:
+        break
 
-    def __init__(self, name: str, price: float):
-        self.__name = name
-        self.__price = price
-
-    @property
-    def get_name(self):
-        return self.__name
-
-    @property
-    def get_price(self):
-        return self.__price
-
-
-class ItemDiscountReport:
-
-    def __init__(self, product: ItemDiscount):
-        self.product = product
-
-    @property
-    def get_parent_data(self):
-        return f"Product {self.product.__name} has price {self.product.__price}"
-
-
-parent_item = ItemDiscount("PC", 35999.99)
-
-# сохранение какой логики ?
-# обратиться к атрибутам пока даже не просят
+numbers = findall(pattern, number)  # просто захотелось использовать регулярка что еще делать дз простое и не очем
+if len(numbers) == 2:  # 1 - не дробное, а больше двух не может быть у нас
+    print(numbers[0] == numbers[1])  # преобразовывать в инт не обязательно, строки можно и так сравнить

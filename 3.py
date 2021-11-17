@@ -1,51 +1,19 @@
 """
-Реализовать возможность переустановки значения цены товара.
-Необходимо, чтобы и родительский,
-и дочерний классы получили новое значение цены.
-Следует проверить это, вызвав соответствующий метод родительского класса
-и функцию дочернего (функция, отвечающая за отображение информации о товаре
-в одной строке).
+Создать два списка с различным количеством элементов.
+В первом должны быть записаны ключи, во втором — значения.
+Необходимо написать функцию, создающую из данных ключей и значений словарь.
+Если ключу не хватает значения,
+в словаре для него должно сохраняться значение None.
+Значения, которым не хватило ключей, необходимо отбросить.
 """
 
+keys = ["key1", "key2", "key3", "key4", "key5", "key6"]
+values = ["val1", "val2", "val3", "val4"]
 
-class ItemDiscount:
+# keys = ["key1", "key2", "key3", "key4"]
+# values = ["val1", "val2", "val3", "val4", "val5", "val6"]
 
-    def __init__(self, name: str, price: float):
-        self.__name = name
-        self.__price = price
+if len(values) < len(keys):
+    values.extend([None for _ in range(len(keys) - len(values))])
 
-    def __get_name(self):
-        return self.__name
-
-    def __get_price(self):
-        return self.__price
-
-    def __set_name(self, name):
-        self.__name = name
-
-    def __set_price(self, price):
-        self.__price = price
-
-    name = property(__get_name, __set_name)
-    price = property(__get_price, __set_price)
-
-
-class ItemDiscountReport:
-
-    def __init__(self, product: ItemDiscount):
-        self.product = product
-
-    @property
-    def get_parent_data(self):
-        return f"Product {self.product.name} has price {self.product.price}"
-
-
-parent_item = ItemDiscount("PC", 35999.99)
-children_item = ItemDiscountReport(parent_item)
-
-print(children_item.get_parent_data)
-
-parent_item.name = "SSD"
-parent_item.price = 199.99
-
-print(children_item.get_parent_data)
+print(dict([(key, value) for key, value in zip(keys, values)]))

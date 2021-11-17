@@ -1,74 +1,64 @@
 """
-Проверить на практике возможности полиморфизма.
-Необходимо разделить дочерний класс ItemDiscountReport на два класса.
-Инициализировать классы необязательно.
-Внутри каждого поместить функцию get_info,
-которая в первом классе будет отвечать за вывод названия товара,
-а вторая — его цены.
-Далее реализовать выполнение каждой из функции тремя способами.
+Усовершенствовать первую функцию из предыдущего примера.
+Необходимо во втором списке часть строковых значений заменить
+на значения типа example345 (строка+число).
+Далее — усовершенствовать вторую функцию
+из предыдущего примера (функцию извлечения данных).
+Дополнительно реализовать поиск определенных подстрок
+в файле по следующим условиям: вывод первого вхождения,
+вывод всех вхождений.
+Реализовать замену всех найденных подстрок на новое значение
+и вывод всех подстрок, состоящих из букв и цифр
+и имеющих пробелы только в начале и конце — например, example345.
 """
-from abc import ABC, abstractmethod
+from os.path import exists
+import random
+from re import findall
 
 
-class ItemDiscount:
-
-    def __init__(self, name: str, price: float):
-        self.__name = name
-        self.__price = price
-
-    def __get_name(self):
-        return self.__name
-
-    def __get_price(self):
-        return self.__price
-
-    def __set_name(self, name):
-        self.__name = name
-
-    def __set_price(self, price):
-        self.__price = price
-
-    name = property(__get_name, __set_name)
-    price = property(__get_price, __set_price)
+def find_text(file, template, multi=False):
+    with open(file, 'r', encoding='utf-8') as f:
+        text = f.read()
+        res = findall(template, text)
+        if multi:
+            return res
+        return res[0]
 
 
-class ItemDiscountReport(ABC):
-
-    def __init__(self, product: ItemDiscount):
-        self.product = product
-
-    @abstractmethod
-    def get_info(self):
-        pass
+def replace(file, old, new):
+    with open(file, "r", encoding='utf-8') as f:
+        old_text = f.read()
+    with open(file, "w", encoding='utf-8') as f:
+        f.write(old_text.replace(old, new))
 
 
-class ItemDiscountReportPrice(ItemDiscountReport):
-
-    def __init__(self, product: ItemDiscount):
-        super().__init__(product)
-
-    @property
-    def get_info(self):
-        return self.product.price
+def read(file_path):
+    with open(file_path, "r", encoding='utf-8') as f:
+        for line in f.readlines():
+            print(line)
 
 
-class ItemDiscountReportName(ItemDiscountReport):
-
-    def __init__(self, product: ItemDiscount):
-        super().__init__(product)
-
-    @property
-    def get_info(self):
-        return self.product.name
+def find_example345(file):
+    with open(file, "r", encoding='utf-8') as f:
+        text = f.read()
+        return findall(r'[a-zA-Z]+\d+', text)
 
 
-parent_item = ItemDiscount("PC", 35999.99)
-children_item_price = ItemDiscountReportPrice(parent_item)
-children_item_name = ItemDiscountReportName(parent_item)
+def write(file_path):
+    if not exists(file_path):
+        print("По данному пути такого файла не существует.")
+    with open(file_path, "w", encoding='utf-8') as f:
+        line_cnt = random.randint(1, 100)
+        random_words = [[chr(random.randint(97, 122)) for _ in range(random.randint(3, 20))] for _ in range(line_cnt)]
+        random_words = ["".join(word).capitalize() for word in random_words]
+        random_numbers = [random.randint(1, 1_000_000_000_000) for _ in range(line_cnt)]
+        f.write("\n".join([f"{word}{random.choice([' ', ''])}{number}" for word, number in zip(random_words, random_numbers)]))
+    read(file_path)
 
-print(children_item_price.get_info)
-print(children_item_name.get_info)
 
-
-# тут уже логично помоему сделать родительский класс для репорта
-# и сделать его абстрактным обязав переопределить get_info
+if __name__ == "__main__":
+    file = '/Users/nikolajpetrov/Documents/gb_interview/gb_interview/test.txt'
+    # write(file)
+    # print(find_text(file, "Wmkcdppul"))
+    # replace(file, "Wmkcdppul", "TEST")
+    print(find_example345(file))

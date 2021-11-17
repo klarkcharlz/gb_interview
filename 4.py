@@ -1,53 +1,42 @@
 """
-Реализовать расчет цены товара со скидкой.
-Величина скидки должна передаваться в качестве аргумента в дочерний класс.
-Выполнить перегрузку методов конструктора дочернего класса
-(метод __init__, в который должна передаваться переменная — скидка),
-и перегрузку метода __str__ дочернего класса.
-В этом методе должна пересчитываться цена и возвращаться результат
-— цена товара со скидкой. Чтобы все работало корректно,
-не забудьте инициализировать дочерний и родительский классы
-(вторая и третья строка после объявления дочернего класса).
+Написать программу, в которой реализовать две функции.
+В первой должен создаваться простой текстовый файл.
+Если файл с таким именем уже существует, выводим соответствующее сообщение.
+Необходимо открыть файл и подготовить два списка:
+с текстовой и числовой информацией.
+Для создания списков использовать генераторы.
+Применить к спискам функцию zip().
+Результат выполнения этой функции должен должен быть обработан
+и записан в файл таким образом,
+чтобы каждая строка файла содержала текстовое и числовое значение.
+Вызвать вторую функцию.
+В нее должна передаваться ссылка на созданный файл.
+Во второй функции необходимо реализовать открытие файла
+и простой построчный вывод содержимого.
+Вся программа должна запускаться по вызову первой функции.
 """
+from os.path import exists
+import random
 
 
-class ItemDiscount:
-
-    def __init__(self, name: str, price: float):
-        self.__name = name
-        self.__price = price
-
-    def __get_name(self):
-        return self.__name
-
-    def __get_price(self):
-        return self.__price
-
-    def __set_name(self, name):
-        self.__name = name
-
-    def __set_price(self, price):
-        self.__price = price
-
-    name = property(__get_name, __set_name)
-    price = property(__get_price, __set_price)
+def read(file_path):
+    with open(file_path, "r", encoding='utf-8') as f:
+        for line in f.readlines():
+            print(line)
 
 
-class ItemDiscountReport:
-
-    def __init__(self, product: ItemDiscount, discount: float):
-        self.product = product
-        self.discount = discount / 100
-
-    @property
-    def get_parent_data(self):
-        return f"Product {self.product.name} has price {self.product.price}"
-
-    def __str__(self):
-        return f"Цена товара {self.product.name} с учетом скидки: {round(self.product.price * (1 - self.discount), 2)}."
+def write(file_path):
+    if not exists(file_path):
+        print("По данному пути такого файла не существует.")
+    with open(file_path, "w", encoding='utf-8') as f:
+        line_cnt = random.randint(1, 100)
+        random_words = [[chr(random.randint(97, 122)) for _ in range(random.randint(3, 20))] for _ in range(line_cnt)]
+        random_words = ["".join(word).capitalize() for word in random_words]
+        random_numbers = [random.randint(1, 1_000_000_000_000) for _ in range(line_cnt)]
+        f.write("\n".join([f"{word} {number}" for word, number in zip(random_words, random_numbers)]))
+    read(file_path)
 
 
-parent_item = ItemDiscount("PC", 35999.99)
-children_item = ItemDiscountReport(parent_item, 15)
-
-print(children_item)
+if __name__ == "__main__":
+    file = '/Users/nikolajpetrov/Documents/gb_interview/gb_interview/test.txt'
+    write(file)

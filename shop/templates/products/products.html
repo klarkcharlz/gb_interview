@@ -13,14 +13,20 @@
             <th>Поставщик</th>
             <th>Единица измерения</th>
             <th>Дата поступления</th>
+            <th>Разделы</th>
         </tr>
         {% for product in object_list %}
-            <th scope="row">{{ product.pk }}</th>
-            <td>{{ product.name }}</td>
-            <td>{{ product.price }}</td>
-            <td>{{ product.provider_name }}</td>
-            <td>{{ product.get_units }}</td>
-            <td>{{ product.date_of_receipt }}</td>
+            <tr>
+                <th scope="row">{{ product.pk }}</th>
+                <td>{{ product.name }}</td>
+                <td>{{ product.price }}</td>
+                <td>{{ product.provider_name }}</td>
+                <td>{{ product.get_units }}</td>
+                <td>{{ product.date_of_receipt }}</td>
+                <td>{% for section in product.section.all %}
+                     {{ section.description }}<br>
+                {% endfor %}</td>
+            </tr>
         {% endfor %}
     </table>
     <button type="button" class="btn btn-dark">Добавить товар</button>

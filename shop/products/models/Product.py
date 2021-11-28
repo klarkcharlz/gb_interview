@@ -1,4 +1,6 @@
 from django.db import models
+from django.contrib.sites.models import Site
+from django.contrib.sites.managers import CurrentSiteManager
 
 from .Section import Section
 
@@ -17,6 +19,8 @@ class Product(models.Model):
     unit = models.CharField(max_length=10, choices=units, verbose_name="еденица измерения")
     provider_name = models.CharField(max_length=64, verbose_name="Наименование поставщика")
     section = models.ManyToManyField(Section, verbose_name="Разделы", related_name='section')
+
+    site = models.ManyToManyField(Site, null=True)
 
     def __str__(self):
         return f"{self.name}"
